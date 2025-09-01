@@ -1,0 +1,27 @@
+# venv / caches
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# build / dist
+build/
+dist/
+*.egg-info/
+
+# misc
+.env
+.env.*
+

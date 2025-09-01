@@ -1,0 +1,23 @@
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "dist", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DTZ"]
+ignore = ["W503"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+combine-as-imports = true
+force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+

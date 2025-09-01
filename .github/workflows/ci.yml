@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv (fallback to pip)
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python - <<'PY'
+          import shutil, subprocess, sys
+          if shutil.which('uv'):
+              sys.exit(0)
+          try:
+              subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'uv'])
+          except Exception as e:
+              print('uv install failed:', e)
+          PY
+
+      - name: Install dependencies and tooling
+        shell: bash
+        run: |
+          set -euxo pipefail
+          if command -v uv >/dev/null 2>&1; then
+            # Project deps (if any)
+            if [ -f requirements.txt ]; then
+              uv pip install -r requirements.txt
+            fi
+            if [ -f pyproject.toml ]; then
+              uv pip install -e . || true
+            fi
+            # Tooling needed for checks
+            uv pip install ruff black pytest pytest-cov
+          else
+            if [ -f requirements.txt ]; then
+              python -m pip install -r requirements.txt
+            fi
+            python -m pip install ruff black pytest pytest-cov
+          fi
+
+      - name: Ruff check
+        run: ruff check .
+
+      - name: Black check
+        run: black --check .
+
+      - name: Pytest with coverage
+        run: pytest -q --cov=src --cov-report=xml
+
