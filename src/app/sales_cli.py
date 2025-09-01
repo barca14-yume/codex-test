@@ -141,11 +141,15 @@ def _format_output(rows: List[Row], *, top: int | None = None, by_date: bool = F
     return "\n".join(lines)
 
 
-def main(argv: List[str] | None = None) -> int:
-    args = list(sys.argv[1:] if argv is None else argv)
+def make_parser(prog: str | None = None) -> argparse.ArgumentParser:
+    """Build and return the argument parser.
+
+    The default program name is ``sales-cli`` to keep help text consistent
+    whether invoked as an installed script or a module.
+    """
 
     parser = argparse.ArgumentParser(
-        prog="python -m src.app.sales_cli",
+        prog=prog or "sales-cli",
         add_help=True,
         description="Aggregate sales totals from a CSV file.",
     )
@@ -162,6 +166,12 @@ def main(argv: List[str] | None = None) -> int:
         default=None,
         help="Write BY_SKU table to CSV path (headers: sku,amount)",
     )
+    return parser
+
+
+def main(argv: List[str] | None = None) -> int:
+    args = list(sys.argv[1:] if argv is None else argv)
+    parser = make_parser()
 
     try:
         ns = parser.parse_args(args)

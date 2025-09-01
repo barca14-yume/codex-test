@@ -5,7 +5,14 @@ import csv as _csv
 
 import pytest
 
-from app.sales_cli import InputError, _format_output, aggregate_by_sku, main, parse_rows
+from app.sales_cli import (
+    InputError,
+    _format_output,
+    aggregate_by_sku,
+    main,
+    parse_rows,
+    make_parser,
+)
 
 
 def write_csv(path: Path, content: str) -> None:
@@ -157,3 +164,9 @@ def test_out_csv(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert rows[0] == "sku,amount"
     assert rows[1].startswith("CCC,") and rows[2].startswith("AAA,")
     assert len(rows) == 3
+
+
+def test_help_uses_sales_cli() -> None:
+    parser = make_parser()
+    text = parser.format_help()
+    assert "usage: sales-cli" in text
