@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', 'pyproject.toml') }}
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt', 'pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -68,5 +68,19 @@ jobs:
       - name: Black check
         run: black --check .
 
-      - name: Pytest with coverage
-        run: pytest -q --cov=src --cov-report=xml
+      - name: Pytest with coverage and JUnit
+        run: pytest -q --cov=src --cov-report=xml --junitxml=junit.xml
+
+      - name: Upload coverage.xml
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: coverage.xml
+
+      - name: Upload junit.xml
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ matrix.python-version }}
+          path: junit.xml

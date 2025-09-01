@@ -17,3 +17,11 @@ Local quickstart:
 - Test: `pytest -q`
 
 See `AGENTS.md` for contributor guidelines.
+
+## CLI Usage
+
+Local run without install:
+- `python -m src.app.sales_cli docs/samples/sales.csv --top 2 --by-date --out out.csv`
+
+Installed entry point (after `uv pip install -e .` or `pip install -e .`):
+- `sales-cli docs/samples/sales.csv --top 2 --by-date --out out.csv`
