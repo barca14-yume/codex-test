@@ -1,5 +1,7 @@
 # Repository
 
+[![CI](https://github.com/barca14-yume/codex-test/actions/workflows/ci.yml/badge.svg)](https://github.com/barca14-yume/codex-test/actions/workflows/ci.yml)
+
 ## Python-first Configuration
 
 This repository is configured for Python development with a lightweight, tools-first setup:
@@ -15,4 +17,3 @@ Local quickstart:
 - Test: `pytest -q`
 
 See `AGENTS.md` for contributor guidelines.
-
